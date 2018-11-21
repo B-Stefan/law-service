@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-from pkg_resources import parse_requirements
-
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -10,9 +8,6 @@ tests_require = [
     'coverage',
     'coveralls'
 ]
-
-install_reqs = parse_requirements('requirements.txt')
-
 
 setup(
     name='law-service',
@@ -38,7 +33,10 @@ setup(
     },
     include_package_data=True,
     zip_safe=False,
-    install_requires=install_reqs,
+    install_requires=[
+        'Flask==1.0.2',
+        'Scrapy==1.5.1'
+    ],
     extras_require={
         'test': tests_require,
         'dev': tests_require
