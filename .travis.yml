@@ -6,7 +6,7 @@ services:
   - docker
 before_install:
   - docker-compose build
-  - docker-compose up  --project-name law-service -d
+  - docker-compose --project-name law-service up -d
 install:
   - pip3 install --upgrade setuptools
   - pip3 install '.[test]'
@@ -16,5 +16,5 @@ script:
   - coverage run --source=law setup.py test
 after_success:
   - coveralls
-  - docker-compose down --project-name law-service
+  - docker-compose --project-name law-service down
 
