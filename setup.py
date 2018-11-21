@@ -42,5 +42,5 @@ setup(
         'dev': tests_require
     },
 
-    test_suite='law.tests',
+    test_suite='law.test',
 )
