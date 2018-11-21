@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+from pkg_resources import parse_requirements
+
+try:
+    from setuptools import setup, find_packages
+except ImportError:
+    from distutils.core import setup, find_packages
+
+tests_require = [
+    'coverage',
+    'coveralls'
+]
+
+install_reqs = parse_requirements('requirements.txt')
+
+
+setup(
+    name='law-service',
+    version='0.1.1',
+    description='Law API and crawler',
+    keywords=[
+        'provenance', 'graph', 'model', 'PROV', 'PROV-DM', 'PROV-JSON', 'JSON',
+        'PROV-XML', 'PROV-N'
+    ],
+    author='Stefan Bieliauskas',
+    author_email='open@conts.de',
+    url='https://github.com/DLR-SC/prov-db-connector',
+    classifiers=[
+        'Development Status :: 1 - Planning',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python :: 3.6'
+    ],
+    license="Apache License 2.0",
+
+    packages=find_packages(),
+    package_dir={
+        'law': 'law'
+    },
+    include_package_data=True,
+    zip_safe=False,
+    install_requires=install_reqs,
+    extras_require={
+        'test': tests_require,
+        'dev': tests_require
+    },
+
+    test_suite='law.tests',
+)

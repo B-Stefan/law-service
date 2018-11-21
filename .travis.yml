@@ -1,0 +1,19 @@
+language: python
+sudo: required
+python:
+  - 3.6
+services:
+  - docker
+before_install:
+  - docker-compose build
+  - docker-compose up -d
+install:
+  - pip install '.[test]'
+script:
+  - docker ps | grep -q 'law_api_neo4j_1'
+  - curl --output /dev/null --silent --head --fail http://localhost:7474
+  - coverage run --source=law_db setup.py test
+after_success:
+  - coveralls
+  - docker-compose down
+
