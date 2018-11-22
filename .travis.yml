@@ -25,6 +25,8 @@ jobs:
       - coveralls
       - docker-compose --project-name law-service down
   - stage: build
+    node_js:
+      "8"
     script:
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
     - export REPO=stefan125/law-service
