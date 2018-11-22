@@ -16,4 +16,20 @@ script:
 after_success:
   - coveralls
   - docker-compose --project-name law-service down
-
+jobs:
+  include:
+  - stage: build docker image
+    script:
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - export REPO=B-Stefan/law-service
+    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+    - docker build -f Dockerfile -t $REPO:$COMMIT .
+    - docker tag $REPO:$COMMIT $REPO:$TAG
+    - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+    - docker push $REPO
+env:
+  global:
+  - secure: ZB7+zLNC+hK/zyeD1c6OdLq18C/4Eqc1UQoYn95yNmUmVam4DZl7M5B0/7bbTp4jEv92Uxdp9iGuc39Sog525ksUULGLuzFowt9pybRjNMAxjvusq3Llco9bO6hFL1PcEDspRtnaWg33nVKB/HBKLsolI1Enz+M0IVex3CSq6yoOZgplwzzaCCniM+x4pmzanwcfTEHFev0btl/lZDoWg8LzzfK1U7G25cbQYYOrJyDpigvQ9f5bQsgRgahlwGBLjDvZ4FwCONMCUp96PDuWdd7rLnyT8JZWGUd2xxlxUdjtFTTMpEWjuXCW54jddi2jBvgprgnk9KkMjXwKdLolxgTJakN069zsatExkdkS5QJ0TatkbwXJNvXpoKNsLnPjcG7K742liXHPtGiSVhOdUdi8w1OZHH+FquQA9VqAmJgHUyRwb6VXnS9UMOLLFpw1Wb6dnKJr8Kl6//6u8N9wUv3wSRHcxz1YI48aBo9WaiJCVhagyXBwR6eWGQCYxWMEo7H94uJk/44Fp80Y1e9+pr3xjX2tBj8bL1sPzzEv2WYhjgQkyUfO1m5tuYenvDWILvzYC/0E57sShT7dwZJHCFDCPOhw3xnud/bex0N+p1wMeNaj87IWkLjL9grmxn0tsBS2qnzUrjIMglSMBiDZd7XDGgdcmLFYhcPHDj3DVlY=
+  - secure: XrSWN4qCjc/339UMHEtCpGPMErIy+ErkGXPJymRVAugRLFqFTn6+TYFGtIluGckuP3oGmUz86BISm+nrZHyY/IqgA6JCOZkFvs+k1xoIUQWQukcxEl7fptoXyfofoWJmTiqDEw9qT+uCgQ/09nW0FmNG4iAqyxqsC2VkPqm+5JhWCr8DwdoW5p4l+TQoylOQ+a6/SWzZbtk7STkSd32Op4Wq0huB4TqfY2q9HvbfML9qgY6xQVEwIaclVRgUjTxP8CeMLocVcNgARrVvgmiFOxxkwvGIWBh0VOy54UqIsWG2VJAWxNm6bqw4w4pcMY4tP6Lm9gR7KdnGILQ8GyN0UWjC6NyAExr7VcTKK0GOeiAalhr+tXTSIUxYLes8OPmFSr3Z5Jc7dYNnh1Nzr5FBDXNz20ycpFtmlQUvHTlQK/hJC7oEaql+4KZZLKWRRIYWbYL6WoS7y/ZVuSmzNHmrsSRGrU+lRsFlgPjQi7CoiZ+0V39U1+GrUigtFxRieR3edMe1hAqLd7CQjyK5OwYIK7Pwuan6ufcUfnbQGHngaFapEoWNfRpLGULzF45n7nBkYeunjgOpNcMrbFGh0JuWbsTFk0ams1q2TzFb63fm/7ia2gfFaZ3UHbx24Z1g+uLEDtjuxCI1kUh/QysC1uE0mciLpeo2yPCg8J3FiCCn+EY=
+  - secure: 2xDDQ7u8F272xq443DFt+ElEBAXrZlU0PsEE3IRsrVgJBiSSykYHGoF7arZ3Zp0XBr/vdIHUfoMRuRgwsEJGuVFP52WEL6RmezfXy9E6P98BJnIGgfUeCE6eVzuSX/bcBonstrB0EcS20GPlzDmVAUPw7/YBMYMhh/rTopcj+48Rn60qjwKp6c+t0xcJ6X5vMUo2e6e8ZOAcbhXy0gT5yxfWEX2FrAFOWUbCCZw68y4g8FylpJs3tLxN+BYzpYVjZ9ByyzSKE3as8vAqlkYQI2gDYqV8ebaacCw/Q5o9Fh3fFZPxtcGyZnLX6VFHV/vdqJ8UbS7M1YkXga/arFITbLtWpJEWnTziYvqp5bpGnk+tckULm0RQ3cEj0IIsgOdrrtluMp3VUYIItEncWOXf0VEK+BUzUY09CP7jMpHNoeskMARo86u7eWliqYn0hk8cne/mLSjTqdd9foSRZ2rkcjw7wBWl268USvjB86Kc6VwKYcpblfMf7g5BfE/gJgh2fAx9hFUpe7Kuwj2/Dpw06oJWHyLZjgqHehleq+hhffx09uWrDi94FUHsOjjlXfGTyulji780pxtOLRErKd/9uaHAAYgsBDQcWWk2KPoIur81iIf0w34Bw1Z3nG+FtjCjZ7nghxOyHcYkSfHW8Ck3TK52SqfNaUGVnu9leFylWik=
+  - COMMIT=${TRAVIS_COMMIT::8}
