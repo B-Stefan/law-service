@@ -12,6 +12,7 @@ jobs:
     language: python
     python:
       - 3.6
+    cache: pip
     before_install:
       - docker-compose build
       - docker-compose --project-name law-service up -d
