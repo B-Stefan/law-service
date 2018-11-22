@@ -1,7 +1,5 @@
 language: python
 sudo: required
-python:
-  - 3.6
 services:
   - docker
 
@@ -12,6 +10,8 @@ stages:
 jobs:
   include:
   - stage: test
+    python:
+      - 3.6
     before_install:
       - docker-compose build
       - docker-compose --project-name law-service up -d
@@ -26,7 +26,7 @@ jobs:
       - docker-compose --project-name law-service down
   - stage: build
     script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
     - export REPO=stefan125/law-service
     - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
     - docker build -f Dockerfile -t $REPO:$COMMIT .
