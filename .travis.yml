@@ -8,6 +8,7 @@ stages:
 
 jobs:
   include:
+  -
   - stage: test
     language: python
     python:
@@ -35,6 +36,15 @@ jobs:
     - docker build -f Dockerfile -t $REPO:$COMMIT .
     - docker tag $REPO:$COMMIT $REPO:$TAG
     - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+    - docker push $REPO
+  - stage: build-builder
+    node_js:
+      "8"
+    script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PASS
+    - export REPO=stefan125/law-service
+    - export TAG=builder
+    - docker build -f Dockerfile --target builder –squash -t $TAG .
     - docker push $REPO
 env:
   global:
