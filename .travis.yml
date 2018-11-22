@@ -44,7 +44,7 @@ jobs:
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     - export REPO=stefan125/law-service
     - export TAG=builder
-    - docker build -f Dockerfile --target builder –squash -t $TAG .
+    - docker build -f Dockerfile --target builder --squash -t $TAG .
     - docker push $REPO
 env:
   global:
