@@ -4,18 +4,6 @@ python:
   - 3.6
 services:
   - docker
-before_install:
-  - docker-compose build
-  - docker-compose --project-name law-service up -d
-install:
-  - pip3 install --upgrade setuptools
-  - pip3 install '.[test]'
-script:
-  - curl --output /dev/null --silent --head --fail http://localhost:7474
-  - coverage run --source=law setup.py test
-after_success:
-  - coveralls
-  - docker-compose --project-name law-service down
 
 stages:
   - test
@@ -23,6 +11,19 @@ stages:
 
 jobs:
   include:
+  - stage: test
+    before_install:
+      - docker-compose build
+      - docker-compose --project-name law-service up -d
+    install:
+      - pip3 install --upgrade setuptools
+      - pip3 install '.[test]'
+    script:
+      - curl --output /dev/null --silent --head --fail http://localhost:7474
+      - coverage run --source=law setup.py test
+    after_success:
+      - coveralls
+      - docker-compose --project-name law-service down
   - stage: build
     script:
     - echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
