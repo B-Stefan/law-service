@@ -1,4 +1,5 @@
 language: python
+
 sudo: required
 services:
   - docker
@@ -16,7 +17,6 @@ jobs:
       - docker-compose build
       - docker-compose --project-name law-service up -d
     install:
-      - pip3 install --upgrade setuptools
       - pip3 install '.[test]'
     script:
       - curl --output /dev/null --silent --head --fail http://localhost:7474
