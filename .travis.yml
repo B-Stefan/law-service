@@ -11,7 +11,6 @@ install:
   - pip3 install --upgrade setuptools
   - pip3 install '.[test]'
 script:
-  - docker ps | grep -q 'law-service_neo4j_1'
   - curl --output /dev/null --silent --head --fail http://localhost:7474
   - coverage run --source=law setup.py test
 after_success:
