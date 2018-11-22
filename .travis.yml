@@ -14,9 +14,6 @@ jobs:
       - 3.6
     cache:
       pip: true
-      directories:
-      - /usr/local # compiled python deps
-      - $HOME/.cache/pip # compiled python deps
     before_install:
       - docker-compose build
       - docker-compose --project-name law-service up -d
