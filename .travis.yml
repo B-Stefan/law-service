@@ -58,7 +58,6 @@ jobs:
         -e "CI_APPLICATION_REPOSITORY=$REPO"
         -e "CI_APPLICATION_TAG=$COMMIT"
         dtzar/helm-kubectl
-        helm init --client-only &&
         helm upgrade --install
         --wait
         --force
@@ -70,6 +69,7 @@ jobs:
         --set service.url="http://service-law.cloud.conts.de"
         --set replicaCount=1
         --namespace="law-service"
+        --tiller-namespace="law-service"
         "law-service-production"
         /root/chart
 
