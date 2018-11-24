@@ -48,7 +48,7 @@ jobs:
     - docker build -f Dockerfile --target builder -t $REPO:$TAG .
     - docker push $REPO
   - stage: deploy
-    if: type = cron
+    if: type != cron
     script:
     - openssl aes-256-cbc -K $encrypted_2d29e5c3789d_key -iv $encrypted_2d29e5c3789d_iv -in .kube/config.enc -out .kube/config -d
     - docker run -it -v .kube:/root/.kube dtzar/helm-kubectl kubectl get services
