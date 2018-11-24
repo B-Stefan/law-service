@@ -51,8 +51,8 @@ jobs:
     if: type != cron
     script:
     - openssl aes-256-cbc -K $encrypted_2d29e5c3789d_key -iv $encrypted_2d29e5c3789d_iv -in .kube/config.enc -out .kube/config -d
-    - cat ./.kube/config
-    - docker run -it -v ./.kube:/root/.kube dtzar/helm-kubectl kubectl get services
+    - mv .kube mv kube
+    - docker run -it -v kube:/root/.kube dtzar/helm-kubectl kubectl get services
 env:
   global:
   - secure: ZB7+zLNC+hK/zyeD1c6OdLq18C/4Eqc1UQoYn95yNmUmVam4DZl7M5B0/7bbTp4jEv92Uxdp9iGuc39Sog525ksUULGLuzFowt9pybRjNMAxjvusq3Llco9bO6hFL1PcEDspRtnaWg33nVKB/HBKLsolI1Enz+M0IVex3CSq6yoOZgplwzzaCCniM+x4pmzanwcfTEHFev0btl/lZDoWg8LzzfK1U7G25cbQYYOrJyDpigvQ9f5bQsgRgahlwGBLjDvZ4FwCONMCUp96PDuWdd7rLnyT8JZWGUd2xxlxUdjtFTTMpEWjuXCW54jddi2jBvgprgnk9KkMjXwKdLolxgTJakN069zsatExkdkS5QJ0TatkbwXJNvXpoKNsLnPjcG7K742liXHPtGiSVhOdUdi8w1OZHH+FquQA9VqAmJgHUyRwb6VXnS9UMOLLFpw1Wb6dnKJr8Kl6//6u8N9wUv3wSRHcxz1YI48aBo9WaiJCVhagyXBwR6eWGQCYxWMEo7H94uJk/44Fp80Y1e9+pr3xjX2tBj8bL1sPzzEv2WYhjgQkyUfO1m5tuYenvDWILvzYC/0E57sShT7dwZJHCFDCPOhw3xnud/bex0N+p1wMeNaj87IWkLjL9grmxn0tsBS2qnzUrjIMglSMBiDZd7XDGgdcmLFYhcPHDj3DVlY=
