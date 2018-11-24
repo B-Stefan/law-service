@@ -11,6 +11,7 @@ jobs:
 
   # This is the test step. This part has to be modified for each project!
   - stage: test
+    if: type != cron
     language: python
     python:
       - 3.6
@@ -30,11 +31,12 @@ jobs:
 
   # Builds and pushes the docker image
   - stage: build
+    if: type != cron
     script:
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
     - export TAG_BUILDER=$REPO:"builder"
-    - export FROM_CACHE=$(if echo $CHANGED_FILES | grep "requirements.txt"; then echo ""; else echo "--cache-from ${TAG_BUILDER}"; fi)
+    - export FROM_CACHE=$(if echo $CHANGED_FILES | grep $DEPENDENCY_FILE; then echo ""; else echo "--cache-from ${TAG_BUILDER}"; fi)
     - docker pull $TAG_BUILDER
     - docker build -f Dockerfile $FROM_CACHE -t $REPO:$COMMIT .
     - docker tag $REPO:$COMMIT $REPO:$TAG
@@ -43,6 +45,7 @@ jobs:
 
   # The builder step push the builder image to the registry
   - stage: build-builder
+    if: type = cron # The builder is only triggered by the travis cron job
     script:
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     - export TAG=builder
@@ -56,3 +59,4 @@ env:
   - COMMIT=${TRAVIS_COMMIT::8}
   - CHANGED_FILES=($(git diff --name-only $TRAVIS_COMMIT_RANGE))
   - REPO=stefan125/law-service
+  - DEPENDENCY_FILE=requirements.txt
