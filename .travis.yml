@@ -62,8 +62,6 @@ jobs:
         --wait
         --force
         --set releaseOverride="production"
-        --set image.repository=$CI_APPLICATION_REPOSITORY
-        --set image.tag=$CI_APPLICATION_TAG
         --set image.pullPolicy=IfNotPresent
         --set application.track="stable"
         --set service.url="http://service-law.cloud.conts.de"
