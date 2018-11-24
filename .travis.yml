@@ -58,8 +58,10 @@ jobs:
         -e "CI_APPLICATION_REPOSITORY=$REPO"
         -e "CI_APPLICATION_TAG=$COMMIT"
         dtzar/helm-kubectl
+        helm init --client-only
         helm upgrade --install
         --wait
+        --force
         --set releaseOverride="production"
         --set image.repository="$CI_APPLICATION_REPOSITORY"
         --set image.tag="$CI_APPLICATION_TAG"
