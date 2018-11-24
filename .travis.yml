@@ -33,7 +33,6 @@ jobs:
   - stage: build
     if: type != cron
     script:
-    - echo "Changed files: $CHANGED_FILES"
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
     - export TAG_BUILDER=$REPO:"builder"
