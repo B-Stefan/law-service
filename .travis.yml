@@ -37,7 +37,7 @@ jobs:
     - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
     - export TAG_BUILDER=$REPO:"builder"
     - export FROM_CACHE=$(if echo $CHANGED_FILES | grep $DEPENDENCY_FILE; then echo ""; else echo "--cache-from ${TAG_BUILDER}"; fi)
-    - docker pull $TAG_BUILDER
+    - if echo $CHANGED_FILES | grep $DEPENDENCY_FILE; then echo "Don't use the cache, dependecy has changed"; else docker pull $TAG_BUILDER; fi
     - docker build -f Dockerfile $FROM_CACHE -t $REPO:$COMMIT .
     - docker tag $REPO:$COMMIT $REPO:$TAG
     - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
