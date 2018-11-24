@@ -51,7 +51,7 @@ jobs:
     if: type != cron
     script:
     - openssl aes-256-cbc -K $encrypted_2d29e5c3789d_key -iv $encrypted_2d29e5c3789d_iv -in .kube/config.enc -out .kube/config -d
-    - mv .kube mv kube
+    - mv .kube kube
     - docker run -it -v kube:/root/.kube dtzar/helm-kubectl kubectl get services
 env:
   global:
