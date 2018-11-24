@@ -56,14 +56,14 @@ jobs:
         -v $TRAVIS_BUILD_DIR/.kube:/root/.kube
         -v $TRAVIS_BUILD_DIR/.chart:/root/chart
         -e "CI_APPLICATION_REPOSITORY=${REPO}"
-        -e "CI_APPLICATION_TAG=${COMMIT}"
+        -e "CI_APPLICATION_TAG=$COMMIT"
         dtzar/helm-kubectl
         helm upgrade --install
         --wait
         --force
         --set releaseOverride="production"
-        --set image.repository="$CI_APPLICATION_REPOSITORY"
-        --set image.tag="$CI_APPLICATION_TAG"
+        --set image.repository=$CI_APPLICATION_REPOSITORY
+        --set image.tag=$CI_APPLICATION_TAG
         --set image.pullPolicy=IfNotPresent
         --set application.track="stable"
         --set service.url="http://service-law.cloud.conts.de"
