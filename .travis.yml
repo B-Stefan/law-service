@@ -1,56 +1,57 @@
 sudo: required
 services:
-  - docker
-
+- docker
 stages:
-  - test
-  - build
-
+- test
+- build
 jobs:
   include:
-
-  # This is the test step. This part has to be modified for each project!
   - stage: test
     if: type != cron
     language: python
     python:
-      - 3.6
+    - 3.6
     cache:
       pip: true
     before_install:
-      - docker-compose build
-      - docker-compose --project-name law-service up -d
+    - docker-compose build
+    - docker-compose --project-name law-service up -d
     install:
-      - pip3 install '.[test]'
+    - pip3 install '.[test]'
     script:
-      - until $(curl --output /dev/null --silent --head --fail http://localhost:7474); do printf '.' ; sleep 1; done
-      - coverage run --source=law setup.py test
+    - until $(curl --output /dev/null --silent --head --fail http://localhost:7474);
+      do printf '.' ; sleep 1; done
+    - coverage run --source=law setup.py test
     after_success:
-      - coveralls
-      - docker-compose --project-name law-service down
-
-  # Builds and pushes the docker image
+    - coveralls
+    - docker-compose --project-name law-service down
   - stage: build
     if: type != cron
     script:
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
-    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+    - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo
+      $TRAVIS_BRANCH ; fi`
     - export TAG_BUILDER=$REPO:"builder"
-    - export FROM_CACHE=$(if echo $CHANGED_FILES | grep $DEPENDENCY_FILE; then echo ""; else echo "--cache-from ${TAG_BUILDER}"; fi)
-    - if echo $CHANGED_FILES | grep $DEPENDENCY_FILE; then echo "Don't use the cache, dependecy has changed"; else docker pull $TAG_BUILDER; fi
+    - export FROM_CACHE=$(if echo $CHANGED_FILES | grep $DEPENDENCY_FILE; then echo
+      ""; else echo "--cache-from ${TAG_BUILDER}"; fi)
+    - if echo $CHANGED_FILES | grep $DEPENDENCY_FILE; then echo "Don't use the cache,
+      dependecy has changed"; else docker pull $TAG_BUILDER; fi
     - docker build -f Dockerfile $FROM_CACHE -t $REPO:$COMMIT .
     - docker tag $REPO:$COMMIT $REPO:$TAG
     - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
     - docker push $REPO
-
-  # The builder step push the builder image to the registry
   - stage: build-builder
-    if: type = cron # The builder is only triggered by the travis cron job
+    if: type = cron
     script:
     - docker login -u $DOCKER_USER -p $DOCKER_PASS
     - export TAG=builder
     - docker build -f Dockerfile --target builder -t $REPO:$TAG .
     - docker push $REPO
+  - stage: deploy
+    if: type = cron
+    script:
+    - openssl aes-256-cbc -K $encrypted_2d29e5c3789d_key -iv $encrypted_2d29e5c3789d_iv -in .kube/config.enc -out .kube/config -d
+    - docker run -it -v .kube:/root/.kube dtzar/helm-kubectl kubectl get services
 env:
   global:
   - secure: ZB7+zLNC+hK/zyeD1c6OdLq18C/4Eqc1UQoYn95yNmUmVam4DZl7M5B0/7bbTp4jEv92Uxdp9iGuc39Sog525ksUULGLuzFowt9pybRjNMAxjvusq3Llco9bO6hFL1PcEDspRtnaWg33nVKB/HBKLsolI1Enz+M0IVex3CSq6yoOZgplwzzaCCniM+x4pmzanwcfTEHFev0btl/lZDoWg8LzzfK1U7G25cbQYYOrJyDpigvQ9f5bQsgRgahlwGBLjDvZ4FwCONMCUp96PDuWdd7rLnyT8JZWGUd2xxlxUdjtFTTMpEWjuXCW54jddi2jBvgprgnk9KkMjXwKdLolxgTJakN069zsatExkdkS5QJ0TatkbwXJNvXpoKNsLnPjcG7K742liXHPtGiSVhOdUdi8w1OZHH+FquQA9VqAmJgHUyRwb6VXnS9UMOLLFpw1Wb6dnKJr8Kl6//6u8N9wUv3wSRHcxz1YI48aBo9WaiJCVhagyXBwR6eWGQCYxWMEo7H94uJk/44Fp80Y1e9+pr3xjX2tBj8bL1sPzzEv2WYhjgQkyUfO1m5tuYenvDWILvzYC/0E57sShT7dwZJHCFDCPOhw3xnud/bex0N+p1wMeNaj87IWkLjL9grmxn0tsBS2qnzUrjIMglSMBiDZd7XDGgdcmLFYhcPHDj3DVlY=
@@ -60,3 +61,5 @@ env:
   - CHANGED_FILES=($(git diff --name-only $TRAVIS_COMMIT_RANGE))
   - REPO=stefan125/law-service
   - DEPENDENCY_FILE=requirements.txt
+before_install:
+
