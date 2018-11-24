@@ -54,8 +54,23 @@ jobs:
     - docker run
         --rm
         -v $TRAVIS_BUILD_DIR/.kube:/root/.kube
+        -v $TRAVIS_BUILD_DIR/.chart:/root/helm-chart
+        -e $CI_APPLICATION_REPOSITORY=$REPO
+        -e $CI_APPLICATION_TAG=$COMMIT
         dtzar/helm-kubectl
-        kubectl get services --namespace law-service
+        helm upgrade --install
+        --wait
+        --set releaseOverride="production"
+        --set image.repository="$CI_APPLICATION_REPOSITORY"
+        --set image.tag="$CI_APPLICATION_TAG"
+        --set image.pullPolicy=IfNotPresent
+        --set application.track="stable"
+        --set service.url="http://service-law.cloud.conts.de"
+        --set replicaCount=1
+        --namespace="law-service"
+        "law-service-production"
+        chart
+
 env:
   global:
   - secure: ZB7+zLNC+hK/zyeD1c6OdLq18C/4Eqc1UQoYn95yNmUmVam4DZl7M5B0/7bbTp4jEv92Uxdp9iGuc39Sog525ksUULGLuzFowt9pybRjNMAxjvusq3Llco9bO6hFL1PcEDspRtnaWg33nVKB/HBKLsolI1Enz+M0IVex3CSq6yoOZgplwzzaCCniM+x4pmzanwcfTEHFev0btl/lZDoWg8LzzfK1U7G25cbQYYOrJyDpigvQ9f5bQsgRgahlwGBLjDvZ4FwCONMCUp96PDuWdd7rLnyT8JZWGUd2xxlxUdjtFTTMpEWjuXCW54jddi2jBvgprgnk9KkMjXwKdLolxgTJakN069zsatExkdkS5QJ0TatkbwXJNvXpoKNsLnPjcG7K742liXHPtGiSVhOdUdi8w1OZHH+FquQA9VqAmJgHUyRwb6VXnS9UMOLLFpw1Wb6dnKJr8Kl6//6u8N9wUv3wSRHcxz1YI48aBo9WaiJCVhagyXBwR6eWGQCYxWMEo7H94uJk/44Fp80Y1e9+pr3xjX2tBj8bL1sPzzEv2WYhjgQkyUfO1m5tuYenvDWILvzYC/0E57sShT7dwZJHCFDCPOhw3xnud/bex0N+p1wMeNaj87IWkLjL9grmxn0tsBS2qnzUrjIMglSMBiDZd7XDGgdcmLFYhcPHDj3DVlY=
