@@ -55,8 +55,8 @@ jobs:
         --rm
         -v $TRAVIS_BUILD_DIR/.kube:/root/.kube
         -v $TRAVIS_BUILD_DIR/.chart:/root/chart
-        -e CI_APPLICATION_REPOSITORY="$REPO"
-        -e CI_APPLICATION_TAG="$COMMIT"
+        -e CI_APPLICATION_REPOSITORY=$REPO
+        -e CI_APPLICATION_TAG=$COMMIT
         dtzar/helm-kubectl
         helm upgrade --install
         --wait
