@@ -54,7 +54,7 @@ jobs:
     - docker run
         --rm
         -v $TRAVIS_BUILD_DIR/.kube:/root/.kube
-        -v $TRAVIS_BUILD_DIR/.chart:/root/helm-chart
+        -v $TRAVIS_BUILD_DIR/.chart:/root/chart
         -e "CI_APPLICATION_REPOSITORY=$REPO"
         -e "CI_APPLICATION_TAG=$COMMIT"
         dtzar/helm-kubectl
@@ -69,7 +69,7 @@ jobs:
         --set replicaCount=1
         --namespace="law-service"
         "law-service-production"
-        chart
+        /root/chart
 
 env:
   global:
