@@ -21,11 +21,7 @@ jobs:
     install:
       - pip3 install '.[test]'
     script:
-      - |
-        until $(curl --output /dev/null --silent --head --fail http://localhost:7474); do \
-          printf '.' \
-          sleep 1 \
-        done
+      - until $(curl --output /dev/null --silent --head --fail http://localhost:7474); do printf '.' ; sleep 1; done
       - coverage run --source=law setup.py test
     after_success:
       - coveralls
