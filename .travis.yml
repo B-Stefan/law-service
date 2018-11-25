@@ -55,8 +55,8 @@ jobs:
     - sudo apt-get update
     - sudo apt-get install snap -y
     - sudo apt-get install snapd -y
-    - sudo snap install kubectl
-    - sudo snap install helm
+    - sudo snap install kubectl --classic
+    - sudo snap install helm --classic
     - helm init --client-only
     - helm dependency update .chart
     - helm dependency build .chart
