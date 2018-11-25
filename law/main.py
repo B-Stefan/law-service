@@ -14,6 +14,11 @@ def api():
     data = service.get_law_paragraphs()
     return jsonify(data)
 
+@app.route('/health')
+def api():
+
+    data = service.get_law_paragraphs()
+    return "I'm healthy "
 
 if __name__ == '__main__':
     app.run()
