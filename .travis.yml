@@ -62,8 +62,7 @@ jobs:
     - helm init --client-only
     - helm dependency update .chart
     - helm dependency build .chart
-    - helm --version
-    - helm lint .chart
+    - helm version --tiller-namespace=law-service
     - helm upgrade
         --install
         --wait
