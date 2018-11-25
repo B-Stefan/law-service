@@ -28,7 +28,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
         - name: NEO4J_URL
-          value: "bold://law-service-production-neo4j-core:7687"
+          value: "bolt://law-service-production-neo4j-core:7687"
         ports:
         - name: "{{ .Values.service.name }}"
           containerPort: {{ .Values.service.internalPort }}
