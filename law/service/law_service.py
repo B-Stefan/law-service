@@ -1,13 +1,12 @@
 from typing import Dict
 
 from law.models.domain import Law, TextParagraph
-from neo4j import GraphDatabase
 
 
 class LawService():
 
-    def __init__(self):
-        self.driver = GraphDatabase.driver("bolt://localhost:7687", auth=("neo4j", "neo4jneo4j"))
+    def __init__(self, driver):
+        self.driver = driver
 
     def get_law_paragraphs(self):
         with self.driver.session() as session:
