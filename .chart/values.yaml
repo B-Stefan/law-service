@@ -19,7 +19,7 @@ service:
   externalPort: 5000
   internalPort: 5000
 neo4j:
-  acceptLicenseAgreement: yes
+  acceptLicenseAgreement: "yes"
   neo4jPassword: neo4jneo4j
 resources:
 #  limits:
