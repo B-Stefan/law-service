@@ -21,6 +21,8 @@ service:
 neo4j:
   neo4jPassword: neo4jneo4j
   imageTag: latest
+  core:
+    numberOfServers: 1
 resources:
 #  limits:
 #    cpu: 100m
