@@ -53,8 +53,8 @@ jobs:
     - mkdir ~/.kube
     - openssl aes-256-cbc -K $encrypted_2d29e5c3789d_key -iv $encrypted_2d29e5c3789d_iv -in .kube/config.enc -out ~/.kube/config -d
     - sudo apt-get install snap -y
-    - sudo snap install kubectl --classic
-    - sudo snap install helm --classic
+    - sudo snap install kubectl
+    - sudo snap install helm
     - helm init --client-only
     - helm dependency update .chart
     - helm dependency build .chart
