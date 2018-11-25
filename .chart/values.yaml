@@ -13,7 +13,7 @@ application:
   initializeCommand:
 service:
   enabled: true
-  name: web
+  name: law-service
   type: ClusterIP
   url: http://my.host.com/
   externalPort: 5000
