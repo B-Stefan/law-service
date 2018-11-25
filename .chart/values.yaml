@@ -18,6 +18,9 @@ service:
   url: http://my.host.com/
   externalPort: 5000
   internalPort: 5000
+neo4j:
+  acceptLicenseAgreement: yes
+  neo4jPassword: neo4jneo4j
 resources:
 #  limits:
 #    cpu: 100m
