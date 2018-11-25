@@ -1,13 +1,11 @@
-import os
-from flask import Flask, jsonify
-from neo4j import GraphDatabase
 
+from flask import Flask, jsonify
 from law.service.law_service import LawService
+from law.utils import get_neo4j_driver_instance
 
 app = Flask(__name__)
 
-driver = GraphDatabase.driver(os.getenv('NEO4J_URL', "bolt://localhost:7687"),
-                        auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD", "neo4jneo4j")))
+driver = get_neo4j_driver_instance()
 service = LawService(driver)
 
 @app.route('/api')

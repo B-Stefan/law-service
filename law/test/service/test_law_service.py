@@ -2,7 +2,7 @@ import unittest
 
 from law.models.domain import Law, LawParagraph, TextParagraph
 from law.service.law_service import LawService
-
+from law.utils import get_neo4j_driver_instance
 
 
 def merge_text_paragraph(service: LawService,
@@ -18,14 +18,14 @@ def merge_text_paragraph(service: LawService,
 class LawServiceTest(unittest.TestCase):
 
     def setUp(self):
-        self.service = LawService()
+        self.service = LawService(get_neo4j_driver_instance())
 
     def tearDown(self):
         self.service.purge_db()
 
     def test_law_service_create(self):
 
-        service = LawService()
+        service = LawService(get_neo4j_driver_instance())
 
         self.assertIsInstance(service, LawService)
 
