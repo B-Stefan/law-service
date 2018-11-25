@@ -15,7 +15,7 @@ def api():
     return jsonify(data)
 
 @app.route('/health')
-def api():
+def health():
 
     data = service.get_law_paragraphs()
     return "I'm healthy "
