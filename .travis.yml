@@ -49,15 +49,16 @@ jobs:
     - docker push $REPO
   - stage: deploy
     if: type != cron
+    before_install:
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl
+    - sudo mv ./kubectl /usr/local/bin/kubectl
+    - curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+    - chmod 700 get_helm.shs
+    - sudo ./get_helm.sh
     script:
     - mkdir ~/.kube
     - openssl aes-256-cbc -K $encrypted_2d29e5c3789d_key -iv $encrypted_2d29e5c3789d_iv -in .kube/config.enc -out ~/.kube/config -d
-    - sudo apt-get update
-    - sudo apt-get install snap -y
-    - sudo apt-get install snapd -y
-    - sudo snap install kubectl --classic
-    - sudo snap install helm --classic
-    - source ~/.bashrc
     - helm init --client-only
     - helm dependency update .chart
     - helm dependency build .chart
