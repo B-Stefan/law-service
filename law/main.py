@@ -16,8 +16,6 @@ def api():
 
 @app.route('/health')
 def health():
-
-    data = service.get_law_paragraphs()
     return "I'm healthy "
 
 if __name__ == '__main__':
