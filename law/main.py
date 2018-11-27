@@ -10,8 +10,9 @@ from law.utils import get_neo4j_driver_instance
 
 app = Flask(__name__)
 
-driver = get_neo4j_driver_instance()
-service = LawService(driver)
+
+#driver = get_neo4j_driver_instance()
+#service = LawService(driver)
 
 
 def add_rest_api(law_service: LawService):
@@ -31,5 +32,5 @@ def health():
     return "I'm healthy "
 
 if __name__ == '__main__':
-    add_rest_api(law_service=service)
-    app.run()
+    add_rest_api(law_service=None)
+    app.run(host='0.0.0.0')
