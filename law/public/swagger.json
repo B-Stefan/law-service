@@ -19,13 +19,6 @@
     "name" : "developers",
     "description" : "Operations available to regular developers"
   } ],
-  "servers" : [ {
-    "url" : "https://virtserver.swaggerhub.com/B-Stefan/law-service/1.0.0",
-    "description" : "Mock server (use examle from spec)"
-  }, {
-    "url" : "http://localhost:5000/api",
-    "description" : "Local server (uses local data)"
-  } ],
   "paths" : {
     "/laws" : {
       "get" : {
@@ -60,12 +53,9 @@
         "parameters" : [ {
           "in" : "path",
           "name" : "id",
+          "type" : "string",
           "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "minimum" : 1
-          },
-          "description" : "The user ID"
+          "description" : "Numeric ID of the user to get."
         } ],
         "responses" : {
           "200" : {
@@ -93,12 +83,9 @@
         "parameters" : [ {
           "in" : "path",
           "name" : "id",
+          "type" : "string",
           "required" : true,
-          "schema" : {
-            "type" : "string",
-            "example" : "bgb-§19"
-          },
-          "description" : "The law paragraph id"
+          "description" : "Numeric ID of the user to get."
         } ],
         "responses" : {
           "200" : {
