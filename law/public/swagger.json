@@ -80,7 +80,7 @@
       "get" : {
         "tags" : [ "developers" ],
         "summary" : "List paragraphs for a law",
-        "operationId" : "getParagaphs",
+        "operationId" : "getTextParagaphs",
         "description" : "Returns a list of text paragaphs for the given parent id\n",
         "produces" : [ "application/json" ],
         "parameters" : [ {
