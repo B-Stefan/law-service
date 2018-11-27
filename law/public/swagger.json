@@ -91,7 +91,28 @@
     "LawParagraph" : {
       "required" : [ "title", "number" ],
       "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "bgb-$20"
+        },
         "title" : {
+          "type" : "string",
+          "example" : "Residence; establishment and termination"
+        },
+        "number" : {
+          "type" : "string",
+          "example" : "§-20"
+        }
+      }
+    },
+    "TextParagraph" : {
+      "required" : [ "text", "number" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "bgb-$20"
+        },
+        "text" : {
           "type" : "string",
           "example" : "Residence; establishment and termination"
         },
