@@ -6,15 +6,15 @@ WORKDIR /install
 
 COPY requirements.txt /requirements.txt
 
-RUN pip install --install-option="--prefix=/install" -r /requirements.txt
+RUN pip install -r /requirements.txt
 
 
 
-FROM python:3.6-alpine
+FROM python:3.6
 
 EXPOSE 5000
 
-COPY --from=builder /install /usr/local
+COPY --from=builder /usr/local /usr/local
 
 ENV PYTHONPATH "${PYTHONPATH}:/app/law"
 
