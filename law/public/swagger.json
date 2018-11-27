@@ -74,6 +74,39 @@
             "description" : "bad input parameter"
           }
         }
+      },
+      "/text/{id}" : {
+        "get" : {
+          "tags" : [ "developers" ],
+          "summary" : "List paragraphs for a law",
+          "operationId" : "getParagaphs",
+          "description" : "Returns a list of text paragaphs for the given parent id\n",
+          "produces" : [ "application/json" ],
+          "parameters" : [ {
+            "in" : "path",
+            "name" : "id",
+            "required" : true,
+            "schema" : {
+              "type" : "string",
+              "example" : "bgb-§19"
+            },
+            "description" : "The law paragraph id"
+          } ],
+          "responses" : {
+            "200" : {
+              "description" : "search results matching criteria",
+              "schema" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/definitions/TextParagraph"
+                }
+              }
+            },
+            "400" : {
+              "description" : "bad input parameter"
+            }
+          }
+        }
       }
     }
   },
