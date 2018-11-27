@@ -18,7 +18,7 @@ def add_rest_api(law_service: LawService):
     api = Api(app, prefix="/api")
     api.add_resource(LawListAPI, '/law',  resource_class_kwargs={ 'law_service': law_service })
     api.add_resource(LawParagraphListAPI, '/law/<string:law_id>/paragraphs', resource_class_kwargs={ 'law_service': law_service})
-    api.add_resource(LawTextListAPI, '/text/<string:paragraph_id>', resource_class_kwargs={ 'law_service': law_service})
+    api.add_resource(LawTextListAPI, '/paragraph/<string:paragraph_id>/text', resource_class_kwargs={ 'law_service': law_service})
 
 
 @app.route('/health')
