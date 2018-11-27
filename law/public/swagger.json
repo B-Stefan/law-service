@@ -53,11 +53,12 @@
         "parameters" : [ {
           "in" : "path",
           "name" : "id",
-          "schema" : {
-            "type" : "string"
-          },
           "required" : true,
-          "description" : "String ID of the law to get"
+          "schema" : {
+            "type" : "integer",
+            "minimum" : 1
+          },
+          "description" : "The user ID"
         } ],
         "responses" : {
           "200" : {
