@@ -8,10 +8,8 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version| replace "+" "_" }}"
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    annotations:
-     kubernetes.io/tls-acme: "true"
-     certmanager.k8s.io/cluster-issuer: letsencrypt-staging
-  #  kubernetes.io/ingress.class: "nginx"
+  annotations:
+    kubernetes.io/tls-acme: "true"
 spec:
   tls:
   - hosts:
