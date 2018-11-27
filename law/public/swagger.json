@@ -19,6 +19,13 @@
     "name" : "developers",
     "description" : "Operations available to regular developers"
   } ],
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/B-Stefan/law-service/1.0.0",
+    "description" : "Mock server (use examle from spec)"
+  }, {
+    "url" : "http://localhost:5000/api",
+    "description" : "Local server (uses local data)"
+  } ],
   "paths" : {
     "/laws" : {
       "get" : {
