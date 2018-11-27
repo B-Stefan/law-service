@@ -1,0 +1,156 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This is a API to query law information",
+    "version" : "1.0.0",
+    "title" : "Law-Service",
+    "contact" : {
+      "email" : "opensource@conts.de"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "admins",
+    "description" : "Secured Admin-only calls"
+  }, {
+    "name" : "developers",
+    "description" : "Operations available to regular developers"
+  } ],
+  "paths" : {
+    "/laws" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "List available laws",
+        "operationId" : "getLaws",
+        "description" : "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Law"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/laws/{id}/paragraphs" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "List paragraphs for a law",
+        "operationId" : "getParagaphs",
+        "description" : "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "type" : "string",
+          "required" : true,
+          "description" : "Numeric ID of the user to get."
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/LawParagraph"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    },
+    "/text/{id}" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "List paragraphs for a law",
+        "operationId" : "getTextParagaphs",
+        "description" : "Returns a list of text paragaphs for the given parent id\n",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "type" : "string",
+          "required" : true,
+          "description" : "Numeric ID of the user to get."
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/TextParagraph"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Law" : {
+      "type" : "object",
+      "required" : [ "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "sgb_2"
+        }
+      }
+    },
+    "LawParagraph" : {
+      "required" : [ "title", "number" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "bgb-$20"
+        },
+        "title" : {
+          "type" : "string",
+          "example" : "Residence; establishment and termination"
+        },
+        "number" : {
+          "type" : "string",
+          "example" : "§-20"
+        }
+      }
+    },
+    "TextParagraph" : {
+      "required" : [ "text", "number" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "example" : "bgb-$20"
+        },
+        "text" : {
+          "type" : "string",
+          "example" : "A minor who is or has been married may independently establish and terminate residence."
+        },
+        "number" : {
+          "type" : "string",
+          "example" : "2"
+        }
+      }
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/B-Stefan/law-service/1.0.0",
+  "schemes" : [ "https" ]
+}
