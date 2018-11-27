@@ -64,6 +64,22 @@ class LawServiceTest(unittest.TestCase):
             'id': id
         })
 
+    def get_text_paragraph_by_parent_id(self):
+        self.service.purge_db()
+        merge_text_paragraph(self.service)
+        merge_text_paragraph(self.service, para_number="444")
+        merge_text_paragraph(self.service, law_id="bgb")
+        texts = self.service.get_text_paragraph_by_parent_id("law_test-para_test")
+        self.assertEqual(len(texts), 1)
+
+    def test_get_laws(self):
+        self.service.purge_db()
+        merge_text_paragraph(self.service)
+        merge_text_paragraph(self.service, law_id="bgb")
+        laws = self.service.get_laws()
+        print(laws)
+        self.assertEqual(laws, ["law_test", "bgb"])
+
     def test_purge_db(self):
         merge_text_paragraph(self.service)
         self.service.purge_db()

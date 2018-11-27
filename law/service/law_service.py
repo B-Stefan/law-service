@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 from law.models.domain import Law, TextParagraph
 
@@ -8,10 +8,35 @@ class LawService():
     def __init__(self, driver):
         self.driver = driver
 
+    def get_laws(self) -> List[str]:
+        with self.driver.session() as session:
+            return session.run('MATCH (x:LawParagraph) RETURN collect(distinct x.law)').single().value()
+
+    def get_text_paragraph_by_parent_id(self, paragraph_id: str):
+        with self.driver.session() as session:
+            re = []
+            for item in session.run('MATCH (t:TextParagraph)-[:HAS]-(p:LawParagraph) '
+                                    'WHERE p.id={paragraph_id} '
+                                    'RETURN t',
+                                    {'paragraph_id': paragraph_id}):
+                re.append(dict(item.value()))
+
+            return re
+
     def get_law_paragraphs(self):
         with self.driver.session() as session:
             re = []
             for item in session.run('MATCH (a:LawParagraph) RETURN a'):
+                re.append(dict(item.value()))
+
+            return re
+
+    def get_law_paragraphs_by_law(self, law_id: str):
+        with self.driver.session() as session:
+            re = []
+            for item in session.run('MATCH (a:LawParagraph) '
+                                    'WHERE a.law={law_id} '
+                                    'RETURN a ', {'law_id': law_id}):
                 re.append(dict(item.value()))
 
             return re
