@@ -147,11 +147,11 @@
         },
         "text" : {
           "type" : "string",
-          "example" : "Residence; establishment and termination"
+          "example" : "A minor who is or has been married may independently establish and terminate residence."
         },
         "number" : {
           "type" : "string",
-          "example" : "§-20"
+          "example" : "2"
         }
       }
     }
