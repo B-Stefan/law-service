@@ -20,42 +20,20 @@
     "description" : "Operations available to regular developers"
   } ],
   "paths" : {
-    "/inventory" : {
+    "/laws" : {
       "get" : {
         "tags" : [ "developers" ],
         "summary" : "List available laws",
         "operationId" : "getLaws",
         "description" : "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
         "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "in" : "query",
-          "name" : "searchString",
-          "description" : "pass an optional search string for looking up inventory",
-          "required" : false,
-          "type" : "string"
-        }, {
-          "in" : "query",
-          "name" : "skip",
-          "description" : "number of records to skip for pagination",
-          "type" : "integer",
-          "format" : "int32",
-          "minimum" : 0
-        }, {
-          "in" : "query",
-          "name" : "limit",
-          "description" : "maximum number of records to return",
-          "type" : "integer",
-          "format" : "int32",
-          "minimum" : 0,
-          "maximum" : 50
-        } ],
         "responses" : {
           "200" : {
             "description" : "search results matching criteria",
             "schema" : {
               "type" : "array",
               "items" : {
-                "$ref" : "#/definitions/InventoryItem"
+                "$ref" : "#/definitions/Law"
               }
             }
           },
@@ -63,75 +41,62 @@
             "description" : "bad input parameter"
           }
         }
-      },
-      "post" : {
-        "tags" : [ "admins" ],
-        "summary" : "adds an inventory item",
-        "operationId" : "addInventory",
-        "description" : "Adds an item to the system",
-        "consumes" : [ "application/json" ],
+      }
+    },
+    "/laws/{id}/paragraphs" : {
+      "get" : {
+        "tags" : [ "developers" ],
+        "summary" : "List paragraphs for a law",
+        "operationId" : "getParagaphs",
+        "description" : "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
         "produces" : [ "application/json" ],
         "parameters" : [ {
-          "in" : "body",
-          "name" : "inventoryItem",
-          "description" : "Inventory item to add",
+          "in" : "path",
+          "name" : "id",
           "schema" : {
-            "$ref" : "#/definitions/InventoryItem"
-          }
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "String ID of the law to get"
         } ],
         "responses" : {
-          "201" : {
-            "description" : "item created"
+          "200" : {
+            "description" : "search results matching criteria",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/LawParagraph"
+              }
+            }
           },
           "400" : {
-            "description" : "invalid input, object invalid"
-          },
-          "409" : {
-            "description" : "an existing item already exists"
+            "description" : "bad input parameter"
           }
         }
       }
     }
   },
   "definitions" : {
-    "InventoryItem" : {
+    "Law" : {
       "type" : "object",
-      "required" : [ "id", "name", "manufacturer", "releaseDate" ],
+      "required" : [ "name" ],
       "properties" : {
         "id" : {
           "type" : "string",
-          "format" : "uuid",
-          "example" : "d290f1ee-6c54-4b01-90e6-d701748f0851"
-        },
-        "name" : {
-          "type" : "string",
-          "example" : "Widget Adapter"
-        },
-        "releaseDate" : {
-          "type" : "string",
-          "format" : "date-time",
-          "example" : "2016-08-29T09:12:33.001Z"
-        },
-        "manufacturer" : {
-          "$ref" : "#/definitions/Manufacturer"
+          "example" : "sgb_2"
         }
       }
     },
-    "Manufacturer" : {
-      "required" : [ "name" ],
+    "LawParagraph" : {
+      "required" : [ "title", "number" ],
       "properties" : {
-        "name" : {
+        "title" : {
           "type" : "string",
-          "example" : "ACME Corporation"
+          "example" : "Residence; establishment and termination"
         },
-        "homePage" : {
+        "number" : {
           "type" : "string",
-          "format" : "url",
-          "example" : "https://www.acme-corp.com"
-        },
-        "phone" : {
-          "type" : "string",
-          "example" : "408-867-5309"
+          "example" : "§-20"
         }
       }
     }
