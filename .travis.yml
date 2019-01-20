@@ -48,7 +48,9 @@ jobs:
     - docker build -f Dockerfile --target builder -t $REPO:$TAG .
     - docker push $REPO
   - stage: deploy
-    if: type != cron
+    if:
+    - type != cron
+    - branch = master
     before_install:
     - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     - chmod +x ./kubectl
