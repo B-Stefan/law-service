@@ -72,7 +72,7 @@ jobs:
         --set image.tag=$TAG
         --set image.pullPolicy=IfNotPresent
         --set application.track="stable"
-        --set service.url="http://service-law.cloud.conts.de"
+        --set service.url="https://service-law.cloud.conts.de"
         --set replicaCount=1
         --namespace="law-service"
         --tiller-namespace="law-service"
