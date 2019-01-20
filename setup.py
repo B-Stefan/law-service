@@ -36,7 +36,8 @@ setup(
     install_requires=[
         'Flask==1.0.2',
         'Scrapy==1.5.1',
-        'neo4j==1.7.1'
+        'neo4j==1.7.1',
+        'flask-restful==0.3.7'
     ],
     extras_require={
         'test': tests_require,
