@@ -35,7 +35,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'Flask==1.0.2',
-        'Scrapy==1.5.1',
+        'Scrapy==1.5.2',
         'neo4j==1.7.1'
     ],
     extras_require={
