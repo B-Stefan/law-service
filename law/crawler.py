@@ -1,6 +1,7 @@
+from law.service.law_service import LawService
+from law.crawler.law_crawler import LawCrawler
 from scrapy.crawler import CrawlerProcess
-from law.crawler import LawCrawler
-from law.service import LawService
+from law.utils import get_neo4j_driver_instance
 
 if __name__ == '__main__':
     process = CrawlerProcess({
@@ -10,6 +11,6 @@ if __name__ == '__main__':
     process.crawl(LawCrawler)
     process.start()  # the script will block here until the crawling is finished
 
-    service = LawService()
+    service = LawService(get_neo4j_driver_instance())
     service.merge_laws(LawCrawler.laws)
 
