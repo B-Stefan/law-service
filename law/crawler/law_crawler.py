@@ -11,7 +11,7 @@ class LawCrawler(scrapy.Spider):
     laws: Dict[str, Law] = {}
     name = 'law_crawler'
     start_urls = ['https://www.gesetze-im-internet.de/']
-    //allowed_domains = ["www.gesetze-im-internet.de", "gesetze-im-internet.de"]
+    allowed_domains = ["www.gesetze-im-internet.de", "gesetze-im-internet.de"]
 
     def get_law(self, response) -> Law:
 
