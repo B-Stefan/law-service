@@ -65,7 +65,8 @@ class LawService():
     def merge_text_paragraph(self, item: TextParagraph):
         cypher = '''
                 MERGE (p:TextParagraph {id: {text_p_id}})
-                SET p.text = {text_p_text}
+                ON CREATE SET p.text = ''
+                SET p.text = p.text+{text_p_text}
                 SET p.number = {text_p_mumber}
                 MERGE (l:LawParagraph {id: {law_p_id}})
                 SET l.name = {law_p_name}
