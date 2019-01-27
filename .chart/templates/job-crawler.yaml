@@ -1,0 +1,39 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "trackableappname" . }}
+  labels:
+    app: {{ template "appname" . }}
+    track: "{{ .Values.application.track }}"
+    tier: "{{ .Values.application.tier }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: "30 1 * * *"
+  jobTemplate:
+    spec:
+      successfulJobsHistoryLimit: 10
+      failedJobsHistoryLimit: 20
+      template:
+        metadata:
+          labels:
+            app: {{ template "appname" . }}
+            track: "{{ .Values.application.track }}"
+            tier: "{{ .Values.application.tier }}"
+            release: {{ .Release.Name }}
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: {{ .Chart.Name }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command:
+            - "python"
+            - "law/crawler.py"
+            env:
+            - name: NEO4J_URL
+              value: "bolt://law-service-production-neo4j-core-0.law-service-production-neo4j.law-service.svc.cluster.local:7687"
+            ports:
+            - name: "{{ .Values.service.name }}"
+              containerPort: {{ .Values.service.internalPort }}
