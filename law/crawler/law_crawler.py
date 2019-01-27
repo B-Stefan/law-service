@@ -10,7 +10,8 @@ class LawCrawler(scrapy.Spider):
 
     laws: Dict[str, Law] = {}
     name = 'law_crawler'
-    start_urls = ['https://www.gesetze-im-internet.de/bgb']
+    start_urls = ['https://www.gesetze-im-internet.de/']
+    //allowed_domains = ["www.gesetze-im-internet.de", "gesetze-im-internet.de"]
 
     def get_law(self, response) -> Law:
 
@@ -50,23 +51,26 @@ class LawCrawler(scrapy.Spider):
 
     def parse(self, response):
 
-        new_law = self.get_law(response)
-        law = self.laws.get(new_law.id, None)
-        if  law is None:
-            self.laws.update({new_law.id:new_law})
+        try:
+            new_law = self.get_law(response)
+            law = self.laws.get(new_law.id, None)
+            if law is None:
+                self.laws.update({new_law.id:new_law})
 
-        law_paragraph = self.get_law_paragraph(response)
+            law_paragraph = self.get_law_paragraph(response)
 
-        if law_paragraph is not None:
-            law.add_law_paragraph(law_paragraph)
+            if law_paragraph is not None:
+                law.add_law_paragraph(law_paragraph)
 
-            texts = self.get_text_paragraphs(response)
+                texts = self.get_text_paragraphs(response)
 
-            law_paragraph.add_text_paragraphs(texts)
+                law_paragraph.add_text_paragraphs(texts)
+        except Exception as e:
+            print(e)
 
         # Scrape all pages
         for next_page in response.css('a[href]::attr(href)'):
             relative_url = next_page.extract()
             absolute_url = response.urljoin(relative_url)
-            if "bgb" in absolute_url and ".html" in absolute_url:
-                yield response.follow(next_page, self.parse)
+            print("Visited: %s", absolute_url)
+            yield response.follow(next_page, self.parse)
