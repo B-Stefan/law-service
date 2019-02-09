@@ -62,9 +62,7 @@ jobs:
     script:
     - mkdir ~/.kube
     - openssl aes-256-cbc -K $encrypted_2d29e5c3789d_key -iv $encrypted_2d29e5c3789d_iv -in .kube/config.enc -out ~/.kube/config -d
-    - tiller -listen ${HELM_HOST} -alsologtostderr > /dev/null 2>&1 &
-    - echo "Tiller is listening on ${HELM_HOST}"
-    - helm init --client-only
+    - helm init --tiller-namespace=$NAMESPACE --upgrade
     - helm dependency update .chart
     - helm dependency build .chart
     - helm upgrade
@@ -78,7 +76,8 @@ jobs:
         --set application.track="stable"
         --set service.url="https://service-law.cloud.conts.de"
         --set replicaCount=1
-        --namespace="law-service"
+        --namespace=$NAMESPACE
+        --tiller-namespace=$NAMESPACE
         "law-service-production"
         .chart
 
@@ -92,5 +91,4 @@ env:
   - REPO=stefan125/law-service
   - TAG="travis-$TRAVIS_BUILD_NUMBER"
   - DEPENDENCY_FILE=requirements.txt
-  - HELM_HOST="localhost:44134"
-
+  - NAMESPACE=law-service
