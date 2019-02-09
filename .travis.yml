@@ -68,7 +68,6 @@ jobs:
     - helm init --client-only
     - helm dependency update .chart
     - helm dependency build .chart
-    - helm version --tiller-namespace=law-service
     - helm upgrade
         --install
         --wait
@@ -81,7 +80,6 @@ jobs:
         --set service.url="https://service-law.cloud.conts.de"
         --set replicaCount=1
         --namespace="law-service"
-        --tiller-namespace="law-service"
         "law-service-production"
         .chart
 
