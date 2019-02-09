@@ -62,7 +62,10 @@ jobs:
     script:
     - mkdir ~/.kube
     - openssl aes-256-cbc -K $encrypted_2d29e5c3789d_key -iv $encrypted_2d29e5c3789d_iv -in .kube/config.enc -out ~/.kube/config -d
-    - helm init --upgrade --tiller-namespace=law-service
+    - export HELM_HOST="localhost:44134"
+    - tiller -listen ${HELM_HOST} -alsologtostderr > /dev/null 2>&1 &
+    - echo "Tiller is listening on ${HELM_HOST}"
+    - helm init --client-only
     - helm dependency update .chart
     - helm dependency build .chart
     - helm version --tiller-namespace=law-service
