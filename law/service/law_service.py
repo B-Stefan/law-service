@@ -115,7 +115,10 @@ class LawService():
             for item in session.run('''
             CALL db.index.fulltext.queryNodes('laws', {term})
             YIELD node, score
-            RETURN node, score
+            WITH node as res
+            MATCH (res)-[]-(y:LawParagraph)
+            RETURN res, y
+            LIMIT 10
             ''', {'term': term}):
                 re.append(dict(item.value()))
 
