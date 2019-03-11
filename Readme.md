@@ -1,4 +1,5 @@
 # Law-Service
+[![Build Status](https://travis-ci.org/B-Stefan/law-service.svg?branch=master)](https://travis-ci.org/B-Stefan/law-service)
 
 This project is about the extraction from laws into a database. The project consists of two components:
 
