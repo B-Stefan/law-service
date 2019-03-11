@@ -10,6 +10,7 @@ metadata:
     heritage: {{ .Release.Service }}
   annotations:
     kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
 spec:
   tls:
   - hosts:
