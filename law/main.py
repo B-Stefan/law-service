@@ -22,7 +22,7 @@ def add_rest_api(law_service: LawService):
     api.add_resource(LawListAPI, '/law',  resource_class_kwargs={ 'law_service': law_service })
     api.add_resource(LawParagraphListAPI, '/law/<string:law_id>/paragraphs', resource_class_kwargs={ 'law_service': law_service})
     api.add_resource(LawTextListAPI, '/paragraph/<string:paragraph_id>/texts', resource_class_kwargs={ 'law_service': law_service})
-    api.add_resource(SearchAPI, '/search?q=<string:search_term>', resource_class_kwargs={ 'law_service': law_service})
+    api.add_resource(SearchAPI, '/search', resource_class_kwargs={ 'law_service': law_service})
 
 swagger_url = "https://app.swaggerhub.com/apis-docs/B-Stefan/law-service/1.1.0"
 
