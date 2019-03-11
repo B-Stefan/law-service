@@ -107,3 +107,25 @@ class LawService():
                 'law_p_id': law_para.id,
                 'keywords': keywords,
             })
+
+    def get_fulltext_result(self, term: str):
+
+        with self.driver.session() as session:
+            re = []
+            for item in session.run('''
+            CALL db.index.fulltext.queryNodes('laws', {term})
+            YIELD node, score
+            RETURN node, score
+            ''', {'term': term}):
+                re.append(dict(item.value()))
+
+            return re
+
+    def create_fulltext_index(self):
+        cypher = '''CALL db.index.fulltext.createNodeIndex('laws', ['Keyword', 'TextParagraph'], ['text'], {analyzer: "german"})'''
+
+        try:
+            with self.driver.session() as session:
+                session.run(cypher)
+        except:
+            print("Warning: During Index creation there was an error")

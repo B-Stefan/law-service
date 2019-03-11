@@ -22,9 +22,14 @@ To test the application follow the next steps:
 1. `docker-compose up -d`
 1. `python setup.py test`
 
+### Local Access
+To access the prodction db locally just port-forward the neo4j instance
+`kubectl port-forward law-service-production-neo4j-core-0 -n law-service 7474:7474 7687:7687`
+
 ## Deployment 
 
 Just create a new git tag via Github or git.
+
 
 ## Licence 
 
