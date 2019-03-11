@@ -11,6 +11,3 @@ if __name__ == '__main__':
     process.crawl(LawCrawler)
     process.start()  # the script will block here until the crawling is finished
 
-    service = LawService(get_neo4j_driver_instance())
-    service.merge_laws(LawCrawler.laws)
-

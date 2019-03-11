@@ -2,12 +2,14 @@ import re
 from typing import Dict
 
 import scrapy
+from law.service.law_service import LawService
 
 from law.models.domain import Law, LawParagraph, TextParagraph
+from law.utils import get_neo4j_driver_instance
 
 
 class LawCrawler(scrapy.Spider):
-
+    db_service = LawService(get_neo4j_driver_instance())
     laws: Dict[str, Law] = {}
     name = 'law_crawler'
     start_urls = ['https://www.gesetze-im-internet.de/']
@@ -20,7 +22,7 @@ class LawCrawler(scrapy.Spider):
         if len(parts) < 4:
             raise RuntimeError("Can't find law descriptions url format wrong")
 
-        return Law(id = parts[3])
+        return Law(id=parts[3])
 
     def get_law_paragraph(self, response):
 
@@ -35,7 +37,7 @@ class LawCrawler(scrapy.Spider):
     def get_text_paragraphs(self, response):
         text_parts = response.css(".jurAbsatz::text").extract()
 
-        texts: list(TextParagraph)= []
+        texts: list(TextParagraph) = []
         for line in text_parts:
 
             match = re.search('^\(([0-9]+)\).(.*)', line)
@@ -50,12 +52,11 @@ class LawCrawler(scrapy.Spider):
         return texts
 
     def parse(self, response):
-
         try:
             new_law = self.get_law(response)
             law = self.laws.get(new_law.id, None)
             if law is None:
-                self.laws.update({new_law.id:new_law})
+                self.laws.update({new_law.id: new_law})
 
             law_paragraph = self.get_law_paragraph(response)
 
@@ -65,6 +66,9 @@ class LawCrawler(scrapy.Spider):
                 texts = self.get_text_paragraphs(response)
 
                 law_paragraph.add_text_paragraphs(texts)
+                for text in texts:
+                    self.db_service.merge_text_paragraph(text)
+
         except Exception as e:
             print(e)
 
