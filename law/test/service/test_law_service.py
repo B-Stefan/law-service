@@ -46,6 +46,14 @@ class LawServiceTest(unittest.TestCase):
             'id': id
         })
 
+    def test_merge_keywords(self):
+
+        law = Law("test")
+        law_para = LawParagraph("test", "number-test", law)
+        self.service.merge_keywords(law_para, ["keyword1", "keyword2"])
+
+        print(self.service.get_keywords_by_law_paragraph_id(law_para.id))
+
     def test_get_paragraph_by_id(self):
 
         law_id = "law_test"

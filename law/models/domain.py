@@ -41,3 +41,7 @@ class Law:
         self.children.update({item.number: item})
         item.parent = self
 
+
+class Keyword:
+    def __init__(self, text: str):
+        self.text = text

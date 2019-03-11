@@ -1,7 +1,9 @@
 import re
-from typing import Dict
+from typing import Dict, List
 
 import scrapy
+
+from law.crawler.text_analysis.keywords import get_keywords
 from law.service.law_service import LawService
 
 from law.models.domain import Law, LawParagraph, TextParagraph
@@ -12,7 +14,7 @@ class LawCrawler(scrapy.Spider):
     db_service = LawService(get_neo4j_driver_instance())
     laws: Dict[str, Law] = {}
     name = 'law_crawler'
-    start_urls = ['https://www.gesetze-im-internet.de/']
+    start_urls = ['https://www.gesetze-im-internet.de/bgb/']
     allowed_domains = ["www.gesetze-im-internet.de", "gesetze-im-internet.de"]
 
     def get_law(self, response) -> Law:
@@ -51,6 +53,11 @@ class LawCrawler(scrapy.Spider):
 
         return texts
 
+    def get_keywords(self, response) -> List[str]:
+        text_parts = response.css(".jurAbsatz::text").extract()
+        text = '.'.join(text_parts)
+        return get_keywords(text)
+
     def parse(self, response):
         try:
             new_law = self.get_law(response)
@@ -59,6 +66,7 @@ class LawCrawler(scrapy.Spider):
                 self.laws.update({new_law.id: new_law})
 
             law_paragraph = self.get_law_paragraph(response)
+            keywords = self.get_keywords(response)
 
             if law_paragraph is not None:
                 law.add_law_paragraph(law_paragraph)
@@ -68,6 +76,7 @@ class LawCrawler(scrapy.Spider):
                 law_paragraph.add_text_paragraphs(texts)
                 for text in texts:
                     self.db_service.merge_text_paragraph(text)
+            self.db_service.merge_keywords(law_paragraph, keywords)
 
         except Exception as e:
             print(e)

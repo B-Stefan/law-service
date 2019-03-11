@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from law.models.domain import Law, TextParagraph
+from law.models.domain import Law, TextParagraph, LawParagraph
 
 
 class LawService():
@@ -51,6 +51,15 @@ class LawService():
 
             return dict(result)
 
+    def get_keywords_by_law_paragraph_id(self, id):
+        with self.driver.session() as session:
+            re = []
+            for item in session.run('MATCH (a:LawParagraph {id: {id}})-[:MENTION]-(k:Keyword) '
+                                    'RETURN k ', {'id': id}):
+                re.append(dict(item.value()))
+
+            return re
+
     def merge_laws(self, laws: Dict[str, Law]):
 
         for key, law in laws.items():
@@ -83,4 +92,18 @@ class LawService():
                 'law_p_name': item.parent.name,
                 'law_p_number': item.parent.number,
                 'law_id': item.parent.parent.id
+            })
+
+    def merge_keywords(self, law_para: LawParagraph, keywords: List[str]):
+        cypher = '''
+                       MERGE (p:LawParagraph {id: {law_p_id}})
+                       WITH p
+                       UNWIND {keywords} as keyword
+                       MERGE (k:Keyword {text: keyword})
+                       MERGE (p)-[:MENTION]->(k)'''
+
+        with self.driver.session() as session:
+            session.run(cypher, {
+                'law_p_id': law_para.id,
+                'keywords': keywords,
             })
