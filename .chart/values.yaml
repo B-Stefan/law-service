@@ -18,7 +18,7 @@ service:
   internalPort: 5000
 neo4j:
   neo4jPassword: neo4jneo4j
-  imageTag: latest
+  imageTag: "3.5.3-enterprise"
   core:
     numberOfServers: 1
 resources:
