@@ -36,7 +36,7 @@ setup(
     install_requires=[
         'Flask==1.0.2',
         'Scrapy==1.5.1',
-        'neo4j==1.7.1',
+        'neo4j==1.7.3',
         'multi-rake==0.0.1'
     ],
     extras_require={
