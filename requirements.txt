@@ -1,5 +1,5 @@
 Flask==1.0.2
-Scrapy==1.5.1
+Scrapy==2.0.0
 neo4j==1.7.1
 flask-restful==0.3.6
 multi-rake==0.0.1
